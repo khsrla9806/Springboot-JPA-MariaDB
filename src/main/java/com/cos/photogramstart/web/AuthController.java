@@ -1,15 +1,23 @@
 package com.cos.photogramstart.web;
 
 import com.cos.photogramstart.domain.user.User;
+import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.service.AuthService;
 import com.cos.photogramstart.web.dto.auth.SiginupDto;
 import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
+
+import javax.validation.Valid;
+import java.util.HashMap;
+import java.util.Map;
 
 @RequiredArgsConstructor
 @Controller
@@ -34,10 +42,22 @@ public class AuthController {
 
     // 회원가입 기능
     @PostMapping("/auth/signup")
-    public String signup(SiginupDto dto) {
-        User user = dto.toEntity();
-        User userEntity = authService.signup(user);
-        log.info(userEntity.toString());
-        return "auth/signin";
+    public String signup(@Valid SiginupDto dto, BindingResult bindingResult) { // SignupDto에서 발생된 오류들을 bindingResult에 있는 FieldErrors라는 컬렉션에 모아준다.
+        if (bindingResult.hasErrors()) {
+            Map<String, String> errorMap = new HashMap<>();
+
+            // 에러가 있으면 FieldErrors에 있는 오류들을 errorMap에 저장해준다.
+            for (FieldError error : bindingResult.getFieldErrors()) {
+                errorMap.put(error.getField(), error.getDefaultMessage());
+                System.out.println(error.getDefaultMessage());
+            }
+
+            throw new CustomValidationException("유효성 검사 실패", errorMap);
+        } else {
+            User user = dto.toEntity();
+            User userEntity = authService.signup(user);
+            log.info(userEntity.toString());
+            return "auth/signin";
+        }
     }
 }
