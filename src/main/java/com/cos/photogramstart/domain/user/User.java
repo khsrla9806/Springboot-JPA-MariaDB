@@ -18,13 +18,16 @@ public class User {
     @Id
     private int id;
 
-    @Column(unique = true)
+    @Column(unique = true, length = 20, nullable = false)
     private String username;
 
+    @Column(nullable = false)
     private String password;
 
+    @Column(nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String name; // 별명
 
     private String website; // 개인 웹사이트 주소
