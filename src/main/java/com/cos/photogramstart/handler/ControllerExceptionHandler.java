@@ -1,6 +1,7 @@
 package com.cos.photogramstart.handler;
 
 import com.cos.photogramstart.handler.ex.CustomValidationException;
+import com.cos.photogramstart.utils.Script;
 import com.cos.photogramstart.web.dto.CMRespDto;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -13,7 +14,7 @@ import java.util.Map;
 public class ControllerExceptionHandler {
 
     @ExceptionHandler(CustomValidationException.class) // RuntimeException이 발생하면 이곳으로 보내준다.
-    public CMRespDto<?> runtimeException(CustomValidationException exception) {
-        return new CMRespDto<>(-1, exception.getMessage(), exception.getErrorMap()); // 동적으로 예외 데이터를 얻어오기 위해서 제너릭에 <> 타입을 지정하지 않는다.
+    public String runtimeException(CustomValidationException exception) {
+        return Script.back(exception.getErrorMap().toString()); // 기존에 작성했던 CMRespDto는 개발자를 위한 것이라고 하면, Script는 클라이언트 입장에서 알림창이다.
     }
 }
