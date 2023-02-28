@@ -1,13 +1,20 @@
 package com.cos.photogramstart.config;
 
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 @EnableWebSecurity // 시큐리티 설정 파일로 등록된 것을 활성화시켜준다.
 @Configuration
 public class SecurityConfig extends WebSecurityConfigurerAdapter { // WebSecurityConfigurerAdapter를 상속받으면 시큐리티 설정파일로 인식이 됨
+
+    @Bean // 비밀번호 해쉬화에 필요한 엔코더를 스프링빈으로 등록 = 다른 곳에서 DI 받아서 사용할 수 있도록 하기 위함
+    public BCryptPasswordEncoder encoder() {
+        return new BCryptPasswordEncoder();
+    }
 
     // 시큐리티 작동 방식을 설정
     @Override

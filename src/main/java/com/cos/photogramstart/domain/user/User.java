@@ -17,16 +17,28 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Id
     private int id;
+
+    @Column(unique = true)
     private String username;
+
     private String password;
+
     private String email;
+
     private String name; // 별명
+
     private String website; // 개인 웹사이트 주소
+
     private String bio; // 자기소개
+
     private String phone; // 휴대폰 번호
+
     private String gender; // 성별
+
     private String profileImageUrl;
+
     private String role; // 역할
+
     private LocalDateTime createDate;
 
     @PrePersist // 데이터가 Insert 되기 전에 실행된다.
