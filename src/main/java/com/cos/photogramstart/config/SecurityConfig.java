@@ -30,6 +30,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter { // WebSecurit
                 .and()
                 .formLogin() // 로그인 인증이 들어오면
                 .loginPage("/auth/signin") // 로그인 페이지로 이동을 시키고
+                .loginProcessingUrl("/auth/signin") // 스프링 시큐리티에 로그인 Post 요청을 위임함
                 .defaultSuccessUrl("/"); // 로그인에 성공하면 홈페이지로 이동시켜줘
     }
 }
