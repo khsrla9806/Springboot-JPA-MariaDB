@@ -5,9 +5,10 @@ import lombok.Data;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+import java.io.Serializable;
 
 @Data
-public class SiginupDto {
+public class SiginupDto implements Serializable {
     @Size(min = 3, max = 20) // 필드에 제한 조건을 추가한다 -> validation 체크를 하기 위해서
     private String username;
 
