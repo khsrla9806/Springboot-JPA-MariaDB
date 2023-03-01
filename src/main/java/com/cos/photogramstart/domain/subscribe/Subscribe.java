@@ -20,8 +20,8 @@ import java.time.LocalDateTime;
                 @UniqueConstraint(
                         name = "subscribe_uk", // Unique 제약조건의 이름
                         columnNames = {  // Unique 제약조건을 적용할 컬럼명
-                                "fromUser",
-                                "toUser"
+                                "fromUserId",
+                                "toUserId"
                         }
                 )
         }
@@ -31,11 +31,11 @@ public class Subscribe {
     @Id
     private int id;
 
-    @JoinColumn(name = "fromUser")
+    @JoinColumn(name = "fromUserId")
     @ManyToOne // 1명의 유저와 매칭이 되기 때문에 ManyToOne의 관계이다.
     private User fromUser; // 구독을 하는 사람
 
-    @JoinColumn(name = "toUser")
+    @JoinColumn(name = "toUserId")
     @ManyToOne
     private User toUser; // 구독을 받는 사람
 
