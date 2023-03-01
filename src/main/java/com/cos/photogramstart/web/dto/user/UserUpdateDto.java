@@ -3,10 +3,15 @@ package com.cos.photogramstart.web.dto.user;
 import com.cos.photogramstart.domain.user.User;
 import lombok.Data;
 
+import javax.validation.constraints.NotBlank;
+
 @Data
 public class UserUpdateDto {
     // username과 email은 수정 불가
+    @NotBlank
     private String name;
+
+    @NotBlank
     private String password;
 
     private String website;

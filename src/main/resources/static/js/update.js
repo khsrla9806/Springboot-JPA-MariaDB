@@ -13,10 +13,6 @@ function update(userId, event) {
         alert("회원정보가 정상적으로 수정되었습니다.");
         location.href = `/user/${userId}`;
     }).fail(error => {
-        if (error.data == null) {
-            alert(error.responseJSON.message);
-        } else {
-            JSON.stringify((error.responseJSON.data))
-        }
+        alert("회원정보 수정에 실패하였습니다. 원인 : " + JSON.stringify((error.responseJSON.data)));
     });
 }
