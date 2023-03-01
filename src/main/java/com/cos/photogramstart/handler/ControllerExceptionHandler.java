@@ -1,5 +1,6 @@
 package com.cos.photogramstart.handler;
 
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.utils.Script;
@@ -33,5 +34,13 @@ public class ControllerExceptionHandler {
                 new CMRespDto<>(-1, exception.getMessage(), exception.getErrorMap()),
                 HttpStatus.BAD_REQUEST);
         // 응답을 ErrorMap이 아닌 Http 상태코드로 반환해주기 위한 코드
+    }
+
+    @ExceptionHandler(CustomApiException.class)
+    public ResponseEntity<CMRespDto<?>> apiException(CustomApiException exception) {
+        return new ResponseEntity<>(
+                new CMRespDto<>(-1, exception.getMessage(), exception.getErrorMap()),
+                HttpStatus.BAD_REQUEST
+        );
     }
 }
