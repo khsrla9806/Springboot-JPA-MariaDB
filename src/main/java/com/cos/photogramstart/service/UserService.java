@@ -2,6 +2,7 @@ package com.cos.photogramstart.service;
 
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.web.dto.user.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.acls.model.NotFoundException;
@@ -20,7 +21,7 @@ public class UserService {
     public User update(int id, User user) {
         // 영속화 하기
         User userEntity = userRepository.findById(id).orElseThrow(() -> {
-            throw new NotFoundException("해당 유저를 찾을 수 없습니다.");
+            throw new CustomValidationApiException("해당 유저를 찾을 수 없습니다.");
         });
 
         // 비밀번호 해쉬화하기
