@@ -10,8 +10,13 @@ function update(userId, event) {
         contentType: "application/x-www-form-urlencoded; charset=utf-8", // key=value 형태
         dataType: "json"
     }).done(response => {
-        console.log("수정 성공 : " + response);
+        alert("회원정보가 정상적으로 수정되었습니다.");
+        location.href = `/user/${userId}`;
     }).fail(error => {
-        console.log("수정 실패 : " + error);
+        if (error.data == null) {
+            alert(error.responseJSON.message);
+        } else {
+            JSON.stringify((error.responseJSON.data))
+        }
     });
 }
