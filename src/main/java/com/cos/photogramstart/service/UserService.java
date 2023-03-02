@@ -40,6 +40,7 @@ public class UserService {
         return userEntity;
     }
 
+    @Transactional(readOnly = true) // 영속성 컨텍스트의 데이터 변경감지를 하지 않기 때문에, 다른 곳에서 회원 프로필을 수정해도 영향을 주지 않는다.
     public User UserProfile(int userId) {
         User user = userRepository.findById(userId).orElseThrow(() -> {
             throw new CustomException("존재하지 않는 유저의 페이지입니다.");
