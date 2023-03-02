@@ -1,6 +1,7 @@
 package com.cos.photogramstart.handler;
 
 import com.cos.photogramstart.handler.ex.CustomApiException;
+import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.handler.ex.CustomValidationException;
 import com.cos.photogramstart.utils.Script;
@@ -46,5 +47,11 @@ public class ControllerExceptionHandler {
                 new CMRespDto<>(-1, exception.getMessage(), exception.getErrorMap()),
                 HttpStatus.BAD_REQUEST
         );
+    }
+
+    // profile 페이지에서 사용되는 간단한 Exception
+    @ExceptionHandler(CustomException.class)
+    public String exception(CustomException exception) {
+        return Script.back(exception.getMessage());
     }
 }
