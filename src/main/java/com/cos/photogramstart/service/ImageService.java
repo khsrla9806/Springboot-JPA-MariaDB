@@ -48,8 +48,6 @@ public class ImageService {
 
         // 이미지를 DB에 저장하는 로직
         Image image = dto.toEntity(imageFileName, principal.getUser());
-        Image imageEntity = imageRepository.save(image);
-
-        System.out.println("image Entity : " + imageEntity);
+        imageRepository.save(image);
     }
 }
