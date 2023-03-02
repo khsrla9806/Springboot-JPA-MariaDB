@@ -2,6 +2,7 @@ package com.cos.photogramstart.service;
 
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomException;
 import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import com.cos.photogramstart.web.dto.user.UserUpdateDto;
 import lombok.RequiredArgsConstructor;
@@ -37,6 +38,14 @@ public class UserService {
         userEntity.setGender(user.getGender());
 
         return userEntity;
+    }
+
+    public User UserProfile(int userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new CustomException("존재하지 않는 유저의 페이지입니다.");
+        });
+
+        return user;
     }
 
 }
