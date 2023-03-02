@@ -1,6 +1,7 @@
 package com.cos.photogramstart.service;
 
 import com.cos.photogramstart.config.auth.PrincipalUserDetails;
+import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.image.ImageRepository;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 import lombok.RequiredArgsConstructor;
@@ -34,7 +35,6 @@ public class ImageService {
 
         // 기존 이미지 파일명과 uuid를 이어서 새로운 파일명을 생성
         String imageFileName = uuid + "_" + originalFileName;
-        System.out.println(imageFileName);
 
         // 이미지 저장경로를 지정
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
@@ -46,5 +46,10 @@ public class ImageService {
             e.printStackTrace();
         }
 
+        // 이미지를 DB에 저장하는 로직
+        Image image = dto.toEntity(imageFileName, principal.getUser());
+        Image imageEntity = imageRepository.save(image);
+
+        System.out.println("image Entity : " + imageEntity);
     }
 }
