@@ -1,5 +1,6 @@
 package com.cos.photogramstart.service;
 
+import com.cos.photogramstart.domain.subscribe.SubscribeRepository;
 import com.cos.photogramstart.domain.user.User;
 import com.cos.photogramstart.domain.user.UserRepository;
 import com.cos.photogramstart.handler.ex.CustomException;
@@ -15,6 +16,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class UserService {
 
     private final UserRepository userRepository;
+    private final SubscribeRepository subscribeRepository;
     private final BCryptPasswordEncoder encoder;
 
     @Transactional
@@ -47,6 +49,12 @@ public class UserService {
         User user = userRepository.findById(pageUserId).orElseThrow(() -> {
             throw new CustomException("존재하지 않는 유저의 페이지입니다.");
         });
+
+        int subscribeState = subscribeRepository.customSubscribeState(principalId, pageUserId);
+        int subscribeCount = subscribeRepository.customSubscribeCount(pageUserId);
+
+        dto.setSubscribeState(subscribeState == 1);
+        dto.setSubscribeCount(subscribeCount);
 
         // DTO에 페이지에 접속한 유저와 주인 여부를 담아주기
         dto.setUser(user);
