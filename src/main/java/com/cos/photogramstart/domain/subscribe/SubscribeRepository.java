@@ -15,4 +15,10 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
     @Modifying
     @Query(value = "DELETE FROM subscribe WHERE fromUserId=:fromUserId AND toUserId=:toUserId", nativeQuery = true)
     void customUnSubscribe(int fromUserId, int toUserId);
+
+    @Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId=:principalId AND toUserId=:pageUserId", nativeQuery = true)
+    int customSubscribeState(int principalId, int pageUserId); // 1이 나오면 구독중, 0이 나오면 구독중이지 않음
+
+    @Query(value = "SELECT COUNT(*) FROM subscribe WHERE toUserId=:pageUserId", nativeQuery = true)
+    int customSubscribeCount(int pageUserId);
 }
