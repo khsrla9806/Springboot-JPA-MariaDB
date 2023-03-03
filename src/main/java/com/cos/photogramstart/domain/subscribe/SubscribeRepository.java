@@ -19,6 +19,6 @@ public interface SubscribeRepository extends JpaRepository<Subscribe, Integer> {
     @Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId=:principalId AND toUserId=:pageUserId", nativeQuery = true)
     int customSubscribeState(int principalId, int pageUserId); // 1이 나오면 구독중, 0이 나오면 구독중이지 않음
 
-    @Query(value = "SELECT COUNT(*) FROM subscribe WHERE toUserId=:pageUserId", nativeQuery = true)
+    @Query(value = "SELECT COUNT(*) FROM subscribe WHERE fromUserId=:pageUserId", nativeQuery = true)
     int customSubscribeCount(int pageUserId);
 }
