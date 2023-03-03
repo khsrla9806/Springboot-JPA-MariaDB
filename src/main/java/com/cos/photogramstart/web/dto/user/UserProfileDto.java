@@ -17,4 +17,10 @@ public class UserProfileDto {
 
     // 해당 유저의 게시글 개수
     private int imageCount;
+
+    // 구독상태 내가 구독하고 있는 사람이면 true, 아니면 false
+    private boolean subscribeState;
+
+    // 구독자수
+    private int subscribeCount;
 }
