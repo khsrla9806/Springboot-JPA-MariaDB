@@ -1,6 +1,7 @@
 package com.cos.photogramstart.domain.user;
 
 import com.cos.photogramstart.domain.image.Image;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -53,6 +54,7 @@ public class User {
     // 우리는 LAZY를 사용한다. LAZY의 또다른 기능은 getImages()가 작동할 때만 images를 가져올 수 있게 된다.
     // 이유는 양방향성 매핑을 했기 때문에 user 호출 -> image -> image에 있는 user가 호출됨 -> image 이런식으로 무한적인 참조가 발생
     @OneToMany(mappedBy = "user", fetch = FetchType.LAZY)
+    @JsonIgnoreProperties({"user"}) // Image 오브젝트 내부에 있는 user는 Json으로 파싱하지 않겠다. (무한참조 방지)
     private List<Image> images;
 
     private LocalDateTime createDate;
