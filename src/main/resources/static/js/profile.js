@@ -38,12 +38,49 @@ function toggleSubscribe(toUserId, obj) {
 }
 
 // (2) 구독자 정보  모달 보기
-function subscribeInfoModalOpen() {
+function subscribeInfoModalOpen(pageUserId) {
 	$(".modal-subscribe").css("display", "flex");
+
+	$.ajax({
+	    type: "get",
+	    url: `/api/user/${pageUserId}/subscribe`,
+	    dataType: "json"
+	}).done(response => {
+        response.data.forEach((u) => {
+            let item = getSubscribeModalItem(u);
+            $("#subscribeModalList").append(item); // 구독정보를 감싸고있는 div 태그
+        });
+	}).fail(error => {
+        console.log("실패!", error);
+	});
 }
 
-function getSubscribeModalItem() {
+// 구독정보 데이터를 받아줄 메서드
+function getSubscribeModalItem(u) {
+    let item = `
+    <div class="subscribe__item" id="subscribeModalItem-${u.id}}">
+        <div class="subscribe__img">
+            <img src="<spring:url value='/upload/${u.profileImageUrl}}' />" onerror="this.src='/images/person.jpeg'"/>
+        </div>
+        <div class="subscribe__text">
+            <h2>${u.username}</h2>
+        </div>
+        <div class="subscribe__btn">`;
 
+        if (!u.equalUserState) {
+            if (u.subscribeState) {
+                item += `<button class="cta blue" onclick="toggleSubscribeModal(this)">구독취소</button>`;
+            } else {
+                item += `<button class="cta" onclick="toggleSubscribeModal(this)">구독하기</button>`;
+            }
+        }
+
+        // 백틱으로 구분해서 if 사용
+        item += `
+        </div>
+    </div>`;
+
+    return item;
 }
 
 
