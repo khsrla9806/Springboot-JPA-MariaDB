@@ -12,6 +12,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 @RequiredArgsConstructor
@@ -49,5 +50,11 @@ public class ImageService {
         // 이미지를 DB에 저장하는 로직
         Image image = dto.toEntity(imageFileName, principal.getUser());
         imageRepository.save(image);
+    }
+
+    @Transactional
+    public List<Image> imageStory(int principalId) {
+        List<Image> images = imageRepository.customStory(principalId);
+        return images;
     }
 }
