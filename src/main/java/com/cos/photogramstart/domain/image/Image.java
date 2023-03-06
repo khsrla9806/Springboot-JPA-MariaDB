@@ -1,6 +1,7 @@
 package com.cos.photogramstart.domain.image;
 
 import com.cos.photogramstart.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -26,6 +27,7 @@ public class Image {
 
     // 사진을 올린 User
     @JoinColumn(name = "userId")
+    @JsonIgnoreProperties({"images"})
     @ManyToOne // 한 명의 유저가 여러개의 이미지를 올리 수 있기 때문에
     private User user;
 
