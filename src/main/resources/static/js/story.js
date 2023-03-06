@@ -7,11 +7,13 @@
 	(5) 댓글삭제
  */
 
+// 스토리 페이징을 위한 변수
+let page = 0;
+
 // (1) 스토리 로드하기
 function storyLoad() {
     $.ajax({
-        type: "get",
-        url: "/api/image",
+        url: `/api/image?page=${page}`,
         dataType: "json"
     }).done(response => {
         response.data.forEach((image) => {
@@ -19,7 +21,7 @@ function storyLoad() {
             $("#storyList").append(storyItem);
         });
     }).fail(error => {
-        console.log(error.getMessage());
+        console.log(error);
     });
 }
 
@@ -30,7 +32,7 @@ function getStoryItem(image) {
         <div class="story-list__item">
             <div class="sl__item__header">
                 <div>
-                    <img class="profile-image" src="<spring:url value='/upload/${image.user.profileImageUrl}' />"
+                    <img class="profile-image" src="/upload/${image.user.profileImageUrl}"
                         onerror="this.src='/images/person.jpeg'" />
                 </div>
                 <div>${image.user.username}</div>
@@ -80,9 +82,13 @@ function getStoryItem(image) {
     return item;
 }
 
-// (2) 스토리 스크롤 페이징하기
+// (2) 스토리 스크롤 페이징하기 => 아래 코드는 window에서 scroll이 실행되면 작동된다.
 $(window).scroll(() => {
-
+    let scrollNum = $(window).scrollTop() - ($(document).height() - $(window).height());
+    if (scrollNum > -1 && scrollNum < 1) {
+        page++; // 한번 작동 시에 페이지를 증가시켜줌
+        storyLoad(); // 다음 페이지를 가져옴
+    }
 });
 
 
