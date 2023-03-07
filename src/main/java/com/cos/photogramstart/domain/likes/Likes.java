@@ -2,6 +2,7 @@ package com.cos.photogramstart.domain.likes;
 
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import lombok.*;
 
 import javax.persistence.*;
@@ -30,6 +31,7 @@ public class Likes { // MariaDB에는 Like라는 예약어가 있기 때문에 L
     private Image image;
 
     @JoinColumn(name = "userId")
+    @JsonIgnoreProperties({"images"}) // images 호출 -> likes 호출 -> user 호출 -> images 호출 : 무한 참조를 막기위함
     @ManyToOne
     private User user;
 
