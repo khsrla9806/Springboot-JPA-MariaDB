@@ -56,6 +56,16 @@ public class ImageService {
     @Transactional(readOnly = true)
     public List<Image> imageStory(int principalId, Pageable pageable) {
         List<Image> images = imageRepository.customStory(principalId, pageable);
+
+        // image의 좋아요 상태여부를 확인하기 위한 로직
+        images.forEach((image) -> {
+            image.getLikes().forEach((like) -> {
+                if (like.getUser().getId() == principalId) {
+                    image.setLikeState(true);
+                }
+            });
+        });
+
         return images;
     }
 }
