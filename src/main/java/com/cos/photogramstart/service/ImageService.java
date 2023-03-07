@@ -59,6 +59,9 @@ public class ImageService {
 
         // image의 좋아요 상태여부를 확인하기 위한 로직
         images.forEach((image) -> {
+            // image의 like 카운트 설정
+            image.setLikeCount(image.getLikes().size());
+
             image.getLikes().forEach((like) -> {
                 if (like.getUser().getId() == principalId) {
                     image.setLikeState(true);

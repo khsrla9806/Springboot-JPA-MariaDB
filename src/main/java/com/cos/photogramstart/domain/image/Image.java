@@ -43,6 +43,8 @@ public class Image {
     private boolean likeState;
 
     // 이미지 좋아요 카운팅
+    @Transient
+    private Integer likeCount;
 
     // 댓글 정보
 
