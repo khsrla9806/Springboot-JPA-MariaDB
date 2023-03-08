@@ -96,24 +96,51 @@ function toggleSubscribeModal(obj) {
 }
 
 // (4) 유저 프로파일 사진 변경 (완)
-function profileImageUpload() {
+function profileImageUpload(pageUserId, principalId) {
+	if (pageUserId != principalId) {
+		alert("수정 권한이 없습니다.");
+		return;
+	}
+
 	$("#userProfileImageInput").click();
 
 	$("#userProfileImageInput").on("change", (e) => {
 		let f = e.target.files[0];
 
 		if (!f.type.match("image.*")) {
-			alert("이미지를 등록해야 합니다.");
+			alert("이미지 파일을 등록해주세요.");
 			return;
 		}
 
-		// 사진 전송 성공시 이미지 변경
-		let reader = new FileReader();
-		reader.onload = (e) => {
-			$("#userProfileImage").attr("src", e.target.result);
-		}
-		reader.readAsDataURL(f); // 이 코드 실행시 reader.onload 실행됨.
-	});
+		// 서버에 이미지 전송
+		let profileImageForm = $("#userProfileImageForm")[0];
+
+		// Ajax로 form 데이터를 보낼 때는 FormData 오브젝트를 사용해야 한다.
+		let formData = new FormData(profileImageForm);
+
+		// Ajax 요청
+		$.ajax({
+			type: "put",
+			url: `/api/user/${principalId}/profileImageUrl`,
+			data: formData,
+			contentType: false, // Default가 true이고, 이는 x-www-from-urlencoded로 파싱됨. false로 해서 multipart/from-data로 받아야함
+			processData: false, // multipart/form-data로 보낼 때, 같이 false로 변경
+			enctype: "multipart/form-data",
+			dataType: "json"
+		}).done(response => {
+			let reader = new FileReader();
+
+			// 사진 전송이 성공되면 유저 이미지의 src를 변경
+			reader.onload = (e) => {
+				$("#userProfileImage").attr("src", e.target.result)
+			}
+			reader.readAsDataURL(f); // 자동으로 reader.onload()가 실행되는 코드
+
+		}).fail(error => {
+			console.log("오류", error);
+		});
+
+	})
 }
 
 
