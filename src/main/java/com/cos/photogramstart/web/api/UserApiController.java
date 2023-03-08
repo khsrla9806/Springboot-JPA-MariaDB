@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.HashMap;
@@ -57,5 +58,16 @@ public class UserApiController {
         List<SubscribeDto> subscribeDtos = subscribeService.subscribeList(principal.getUser().getId(), pageUserId);
 
         return new ResponseEntity<>(new CMRespDto<>(1, "구독정보가져오기 성공", subscribeDtos), HttpStatus.OK);
+    }
+
+    @PutMapping("/api/user/{principalId}/profileImageUrl")
+    public ResponseEntity<?> profileImageUrlUpdate(@PathVariable int principalId,
+                                                   MultipartFile profileImageFile,
+                                                   @AuthenticationPrincipal PrincipalUserDetails principal) {
+        User userEntity = userService.profileImageUrlUpdate(principalId, profileImageFile);
+
+        // 세션을 변경하기 위한 코드
+        principal.setUser(userEntity);
+        return new ResponseEntity<>(new CMRespDto<>(1, "프로필 사진 변경 완료", null), HttpStatus.OK);
     }
 }
