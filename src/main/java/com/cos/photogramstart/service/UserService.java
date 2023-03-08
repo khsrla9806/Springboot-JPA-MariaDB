@@ -61,6 +61,10 @@ public class UserService {
         dto.setPageOwnerState(pageUserId == principalId);
         dto.setImageCount(user.getImages().size());
 
+        user.getImages().forEach((image) -> {
+            image.setLikeCount(image.getLikes().size());
+        });
+
         return dto;
     }
 
