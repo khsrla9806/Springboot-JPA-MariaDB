@@ -4,6 +4,8 @@ import com.cos.photogramstart.domain.comment.Comment;
 import com.cos.photogramstart.domain.comment.CommentRepository;
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.user.User;
+import com.cos.photogramstart.domain.user.UserRepository;
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.web.dto.comment.CommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,10 +16,13 @@ import org.springframework.transaction.annotation.Transactional;
 public class CommentService {
     private final CommentRepository commentRepository;
 
+    private final UserRepository userRepository;
+
     @Transactional
     public Comment makeComment(String content, int imageId, int userId) {
-        User user = new User();
-        user.setId(userId);
+        User user = userRepository.findById(userId).orElseThrow(() -> {
+            throw new CustomApiException("찾는 유저는 존재하지 않습니다.");
+        });
 
         Image image = new Image();
         image.setId(imageId);
