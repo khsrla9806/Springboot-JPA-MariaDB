@@ -71,4 +71,9 @@ public class ImageService {
 
         return images;
     }
+
+    @Transactional(readOnly = true)
+    public List<Image> popularImages() {
+        return imageRepository.customPopular();
+    }
 }
