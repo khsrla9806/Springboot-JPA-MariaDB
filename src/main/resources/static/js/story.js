@@ -62,20 +62,26 @@ function getStoryItem(image) {
                     <p>${image.caption}</p>
                 </div>
 
-                <div id="storyCommentList-${image.id}">
+                <div id="storyCommentList-${image.id}">`;
 
-                    <div class="sl__item__contents__comment" id="storyCommentItem-${image.id}"">
-                        <p>
-                            <b>Lovely :</b> 부럽습니다.
-                        </p>
+				image.comments.forEach((comment) => {
+					item += `
+					<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
+						<p>
+							<b>${comment.user.username} :</b> ${comment.content}
+						</p>
+			
+						<button>
+							<i class="fas fa-times"></i>
+						</button>
+			
+					</div>
+					`
+				});
 
-                        <button>
-                            <i class="fas fa-times"></i>
-                        </button>
 
-                    </div>
-
-                </div>
+                item += `
+				</div>
 
                 <div class="sl__item__input">
                     <input type="text" placeholder="댓글 달기..." id="storyCommentInput-${image.id}" />
@@ -161,9 +167,28 @@ function addComment(imageId) {
 		dataType: "json"
 	}).done(response => {
 		console.log("댓글쓰기 성공", response);
+
+		let comment = response.data;
+
+		let content = `
+		<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
+			<p>
+				<b>${comment.user.username} :</b> ${comment.content}
+			</p>
+
+			<button>
+				<i class="fas fa-times"></i>
+			</button>
+
+		</div>`;
+
+		commentList.prepend(content);
+
 	}).fail(error => {
 		console.log("댓글쓰기 실패", error);
 	});
+
+	commentInput.val("");
 }
 
 // (5) 댓글 삭제
