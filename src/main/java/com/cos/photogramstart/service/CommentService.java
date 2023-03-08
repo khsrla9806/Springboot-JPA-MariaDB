@@ -1,6 +1,10 @@
 package com.cos.photogramstart.service;
 
+import com.cos.photogramstart.domain.comment.Comment;
 import com.cos.photogramstart.domain.comment.CommentRepository;
+import com.cos.photogramstart.domain.image.Image;
+import com.cos.photogramstart.domain.user.User;
+import com.cos.photogramstart.web.dto.comment.CommentDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -11,8 +15,22 @@ public class CommentService {
     private final CommentRepository commentRepository;
 
     @Transactional
-    public void makeComment() {
+    public Comment makeComment(String content, int imageId, int userId) {
+        User user = new User();
+        user.setId(userId);
 
+        Image image = new Image();
+        image.setId(imageId);
+
+        Comment comment = Comment.builder()
+                .user(user)
+                .image(image)
+                .content(content)
+                .build();
+
+        // Native Query를 사용할 때, 반환 타입을 void, Integer, int로만 사용할 수 있다.
+        // 해당 객체를 반환받아야 한다면 어쩔 수 없기 JPA의 save() 메소드를 써야 한다.
+        return commentRepository.save(comment);
     }
 
     @Transactional
