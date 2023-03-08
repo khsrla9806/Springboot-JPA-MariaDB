@@ -10,6 +10,8 @@
 // 스토리 페이징을 위한 변수
 let page = 0;
 
+let principalId = $("#principalId").val();
+
 // (1) 스토리 로드하기
 function storyLoad() {
     $.ajax({
@@ -66,17 +68,21 @@ function getStoryItem(image) {
 
 				image.comments.forEach((comment) => {
 					item += `
-					<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
-						<p>
-							<b>${comment.user.username} :</b> ${comment.content}
-						</p>
+						<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
+							<p>
+								<b>${comment.user.username} :</b> ${comment.content}
+							</p>`;
+
+					if (principalId == comment.user.id) {
+						item += `
+							<button>
+								<i class="fas fa-times"></i>
+							</button>`;
+					}
+					
 			
-						<button>
-							<i class="fas fa-times"></i>
-						</button>
-			
-					</div>
-					`
+					item += `
+						</div>`;
 				});
 
 
