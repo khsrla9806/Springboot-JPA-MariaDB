@@ -75,7 +75,7 @@ function getStoryItem(image) {
 
 					if (principalId == comment.user.id) {
 						item += `
-							<button>
+							<button onclick="deleteComment(${comment.id})">
 								<i class="fas fa-times"></i>
 							</button>`;
 					}
@@ -182,7 +182,7 @@ function addComment(imageId) {
 				<b>${comment.user.username} :</b> ${comment.content}
 			</p>
 
-			<button>
+			<button onclick="deleteComment(${comment.id})">
 				<i class="fas fa-times"></i>
 			</button>
 
@@ -198,8 +198,17 @@ function addComment(imageId) {
 }
 
 // (5) 댓글 삭제
-function deleteComment() {
-
+function deleteComment(commentId) {
+	$.ajax({
+		type: "delete",
+		url: `/api/comment/${commentId}`,
+		dataType: "json"
+	}).done(response => {
+		console.log("댓글 삭제 성공", response);
+		$(`#storyCommentItem-${commentId}`).remove();
+	}).fail(error => {
+		console.log("댓글 삭제 실패", error);
+	});
 }
 
 
