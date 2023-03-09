@@ -28,15 +28,6 @@ public class CommentApiController {
     public ResponseEntity<?> makeComment(@Valid @RequestBody CommentDto dto,
                                          BindingResult bindingResult,
                                          @AuthenticationPrincipal PrincipalUserDetails principal) {
-        // 유효성 검사 로직
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-            }
-            throw new CustomValidationApiException("유효성 검사 실패", errorMap);
-        }
-
         // 핵심 로직
         Comment comment = commentService.makeComment(dto.getContent(), dto.getImageId(), principal.getUser().getId());
         return new ResponseEntity<>(new CMRespDto<>(1, "댓글 작성 완료", comment), HttpStatus.CREATED);

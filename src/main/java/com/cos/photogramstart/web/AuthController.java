@@ -43,21 +43,10 @@ public class AuthController {
     // 회원가입 기능
     @PostMapping("/auth/signup")
     public String signup(@Valid SiginupDto dto, BindingResult bindingResult) { // SignupDto에서 발생된 오류들을 bindingResult에 있는 FieldErrors라는 컬렉션에 모아준다.
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            // 에러가 있으면 FieldErrors에 있는 오류들을 errorMap에 저장해준다.
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-                System.out.println(error.getDefaultMessage());
-            }
-
-            throw new CustomValidationException("유효성 검사 실패", errorMap);
-        } else {
-            User user = dto.toEntity();
-            User userEntity = authService.signup(user);
-            log.info(userEntity.toString());
-            return "auth/signin";
-        }
+        // 핵심 로직: 실제 회원가입이 진행되는 곳 (CRUD)
+        User user = dto.toEntity();
+        User userEntity = authService.signup(user);
+        log.info(userEntity.toString());
+        return "auth/signin";
     }
 }

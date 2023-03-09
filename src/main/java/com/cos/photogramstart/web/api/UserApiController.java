@@ -36,21 +36,10 @@ public class UserApiController {
 
     @PutMapping("/api/user/{id}") // BindingResult는 반드시 @Valid가 붙는 필드 뒤에 적어줘야 한다.
     public CMRespDto<?> update(@PathVariable int id, @Valid UserUpdateDto dto, BindingResult bindingResult, @AuthenticationPrincipal PrincipalUserDetails principal) {
-        // 유효성 검사
-        if (bindingResult.hasErrors()) {
-            Map<String, String> errorMap = new HashMap<>();
-
-            for (FieldError error : bindingResult.getFieldErrors()) {
-                errorMap.put(error.getField(), error.getDefaultMessage());
-                System.out.println(error.getDefaultMessage());
-            }
-
-            throw new CustomValidationApiException("유효성 검사 실패", errorMap);
-        } else {
-            User userEntity = userService.update(id, dto.toEntity());
-            principal.setUser(userEntity); // 수정된 세션 정보를 반영
-            return new CMRespDto<>(1, "회원수정완료", userEntity);
-        }
+        // 핵심 로직 : 공통 로직은 AOP로 관리
+        User userEntity = userService.update(id, dto.toEntity());
+        principal.setUser(userEntity); // 수정된 세션 정보를 반영
+        return new CMRespDto<>(1, "회원수정완료", userEntity);
     }
 
     @GetMapping("/api/user/{pageUserId}/subscribe")

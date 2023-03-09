@@ -2,10 +2,7 @@ package com.cos.photogramstart.domain.user;
 
 import com.cos.photogramstart.domain.image.Image;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
@@ -14,7 +11,8 @@ import java.util.List;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
+@Getter
+@Setter
 @Entity
 public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -62,5 +60,10 @@ public class User {
     @PrePersist // 데이터가 Insert 되기 전에 실행된다.
     public void createDate() {
         this.createDate = LocalDateTime.now();
+    }
+
+    @Override
+    public String toString() {
+        return "username = " + username + ", name = " + name + ", email = " + email;
     }
 }
