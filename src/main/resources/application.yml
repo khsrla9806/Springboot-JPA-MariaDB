@@ -41,13 +41,13 @@ spring:
 
     oauth2:
       client:
-        registraion:
+        registration:
           facebook:
             client-id: 1356530471855533
             client-secret: eab6974da8584b0d56e0c145ecb1a3d0
             scope:
-            - public_prodile
-            - emial
+              - public_profile
+              - email
 
 file:
   path: /Users/kimhunsope/IdeaProjects/imageStorage/
