@@ -5,20 +5,39 @@ import lombok.Data;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
 
 @Data
-public class PrincipalUserDetails implements UserDetails {
+public class PrincipalUserDetails implements UserDetails, OAuth2User {
 
     private static final long serialVersionUID = 1L;
 
     private User user;
+    private Map<String, Object> attributes;
 
     public PrincipalUserDetails(User user) {
         this.user = user;
+    }
+
+    // OAuth2 유저 구분을 위한 생성자 오버로딩
+    public PrincipalUserDetails(User user, Map<String, Object> attributes) {
+        this.user = user;
+        this.attributes = attributes;
+    }
+
+    @Override
+    public Map<String, Object> getAttributes() {
+        return attributes;
+    }
+
+    @Override
+    public String getName() {
+        return (String) attributes.get("name");
     }
 
     // 사용자의 권한을 가져오는 메서드 (권한이 하나가 아닐 수도 있기에 Collection으로 반환)
