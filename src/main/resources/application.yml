@@ -39,5 +39,15 @@ spring:
       name: kim
       password: 1234
 
+    oauth2:
+      client:
+        registraion:
+          facebook:
+            client-id: 1356530471855533
+            client-secret: eab6974da8584b0d56e0c145ecb1a3d0
+            scope:
+            - public_prodile
+            - emial
+
 file:
   path: /Users/kimhunsope/IdeaProjects/imageStorage/
