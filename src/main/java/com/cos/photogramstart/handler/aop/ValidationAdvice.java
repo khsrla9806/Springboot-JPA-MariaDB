@@ -1,9 +1,15 @@
 package com.cos.photogramstart.handler.aop;
 
+import com.cos.photogramstart.handler.ex.CustomValidationApiException;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @Component // IoC 컨테이너에 빈으로 등록해주는 어노테이션들의 최상위 객체
 @Aspect // AOP 처리를 할 수 있도록 해주는 어노테이션
@@ -26,6 +32,23 @@ public class ValidationAdvice {
 
         System.out.println("apiAdvice 실행");
 
+        Object[] args = proceedingJoinPoint.getArgs(); // 메서드가 가지고 있는 매개변수를 Object 배열에 담는다.
+        for (Object arg : args) {
+            if (arg instanceof BindingResult) { // 받아온 메서드에 @Valid를 통한 BindingResult가 존재하는지 여부
+                // arg를 BindingResult 타입으로 다운캐스팅
+                BindingResult bindingResult = (BindingResult) arg;
+
+                // 유효성 검사 로직
+                if (bindingResult.hasErrors()) {
+                    Map<String, String> errorMap = new HashMap<>();
+                    for (FieldError error : bindingResult.getFieldErrors()) {
+                        errorMap.put(error.getField(), error.getDefaultMessage());
+                    }
+                    throw new CustomValidationApiException("유효성검사 실패", errorMap);
+                }
+            }
+        }
+
         return proceedingJoinPoint.proceed(); // proceed()는 다시 원래 메서드로 돌아갈 수 있도록 해준다.
     }
 
@@ -34,6 +57,22 @@ public class ValidationAdvice {
     public Object advice(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
 
         System.out.println("advice 실행");
+
+        Object[] args = proceedingJoinPoint.getArgs(); // 메서드가 가지고 있는 매개변수를 Object 배열에 담는다.
+        for (Object arg : args) {
+            if (arg instanceof BindingResult) {
+                BindingResult bindingResult = (BindingResult) arg;
+
+                // 유효성 검사 로직
+                if (bindingResult.hasErrors()) {
+                    Map<String, String> errorMap = new HashMap<>();
+                    for (FieldError error : bindingResult.getFieldErrors()) {
+                        errorMap.put(error.getField(), error.getDefaultMessage());
+                    }
+                    throw new CustomValidationApiException("유효성 검사 실패", errorMap);
+                }
+            }
+        }
 
         return proceedingJoinPoint.proceed();
     }
