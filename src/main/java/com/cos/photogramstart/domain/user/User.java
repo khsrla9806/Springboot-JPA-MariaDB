@@ -19,7 +19,7 @@ public class User {
     @Id
     private int id;
 
-    @Column(unique = true, length = 20, nullable = false)
+    @Column(unique = true, length = 100, nullable = false)
     private String username;
 
     @Column(nullable = false)
