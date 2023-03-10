@@ -135,6 +135,7 @@ function profileImageUpload(pageUserId, principalId) {
 				$("#userProfileImage").attr("src", e.target.result)
 			}
 			reader.readAsDataURL(f); // 자동으로 reader.onload()가 실행되는 코드
+			alert("프로필 이미지 변경이 완료되었습니다.");
 
 		}).fail(error => {
 			console.log("오류", error);
