@@ -37,7 +37,7 @@ function getStoryItem(image) {
                     <img class="profile-image" src="/upload/${image.user.profileImageUrl}"
                         onerror="this.src='/images/person.jpeg'" />
                 </div>
-                <div>${image.user.username}</div>
+                <div>${image.user.name}</div>
             </div>
 
             <div class="sl__item__img">
@@ -70,7 +70,7 @@ function getStoryItem(image) {
 					item += `
 						<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
 							<p>
-								<b>${comment.user.username} :</b> ${comment.content}
+								<b>${comment.user.name} :</b> ${comment.content}
 							</p>`;
 
 					if (principalId == comment.user.id) {
@@ -179,7 +179,7 @@ function addComment(imageId) {
 		let content = `
 		<div class="sl__item__contents__comment" id="storyCommentItem-${comment.id}"">
 			<p>
-				<b>${comment.user.username} :</b> ${comment.content}
+				<b>${comment.user.name} :</b> ${comment.content}
 			</p>
 
 			<button onclick="deleteComment(${comment.id})">

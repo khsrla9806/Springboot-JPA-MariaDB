@@ -37,18 +37,19 @@ public class UserService {
             throw new CustomValidationApiException("해당 유저를 찾을 수 없습니다.");
         });
 
-        // 비밀번호 해쉬화하기
-        String rawPassword = user.getPassword();
-        String encPassword = encoder.encode(rawPassword);
-
         // 영속화된 유저 수정하기
         userEntity.setName(user.getName());
-        userEntity.setPassword(encPassword);
         userEntity.setWebsite(user.getWebsite());
         userEntity.setBio(user.getBio());
         userEntity.setPhone(user.getPhone());
         userEntity.setGender(user.getGender());
 
+        if (!user.getPassword().equals("")) { // dto에 입력된 비밀번호가 없을 때는 기존 비밀번호 그대로
+            // 비밀번호 해쉬화하기
+            String rawPassword = user.getPassword();
+            String encPassword = encoder.encode(rawPassword);
+            userEntity.setPassword(encPassword);
+        }
         return userEntity;
     }
 
