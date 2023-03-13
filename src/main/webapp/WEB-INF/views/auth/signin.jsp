@@ -46,6 +46,27 @@
                                 <span>Facebook으로 로그인</span>
                             </button>
                         </div>
+
+                       <div class="login__google">
+                           <button onclick="javascript:location.href='/oauth2/authorization/google'" >
+                               <i class="fab fa-google"></i>
+                               <span>Google 계정 로그인</span>
+                           </button>
+                       </div>
+
+                       <div class="login__naver">
+                           <button onclick="javascript:location.href='/oauth2/authorization/naver'" >
+                               <img src="/images/naver_icon.png" />
+                               <span>Naver 계정 로그인</span>
+                           </button>
+                       </div>
+
+                       <div class="login__kakao">
+                           <button onclick="javascript:location.href='/oauth2/authorization/kakao'" >
+                               <img src="/images/kakao_icon.png">
+                               <span>Kakao 계정 로그인</span>
+                           </button>
+                       </div>
                         <!-- Oauth 소셜로그인end -->
                     </div>
                     
