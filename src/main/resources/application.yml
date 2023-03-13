@@ -48,6 +48,45 @@ spring:
             scope:
               - public_profile
               - email
+          google:
+            client-id: 687304494036-abpfvb55pvcguov5d0lsutgo4ik3ojf5.apps.googleusercontent.com
+            client-secret: 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
+            scope:
+              - email
+              - profile
+          kakao:
+            client-id: f12223eb4a429ad7472706cd986b8563
+            client-secret: kcr55h8WXH2mXJMqTKZtr5wEa5kpXQvb
+            scope:
+              - account_email
+              - profile_nickname
+              - profile_image
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/kakao
+            client-name: Kakao
+            client-authentication-method: POST
+          naver:
+            client-id: zZzIGW0ff7oUR6kLVm31
+            client-secret: FEGKnDt6FJ
+            scope:
+              - id
+              - email
+              - name
+            authorization-grant-type: authorization_code
+            redirect-uri: http://localhost:8080/login/oauth2/code/naver
+            client-name: Naver
+            client-authentication-method: POST
+        provider:
+          kakao:
+            authorization-uri: https://kauth.kakao.com/oauth/authorize # request url
+            token-uri: https://kauth.kakao.com/oauth/token # 토큰 받을 url
+            user-info-uri: https://kapi.kakao.com/v2/user/me # 회원정보를 받은 url
+            user-name-attribute: id # 받을 데이터의 key 값
+          naver:
+            authorization-uri: https://nid.naver.com/oauth2.0/authorize # request url
+            token-uri: https://nid.naver.com/oauth2.0/token # 토큰 받을 url
+            user-info-uri: https://openapi.naver.com/v1/nid/me # 회원정보를 받은 url
+            user-name-attribute: response
 
 file:
   path: /Users/kimhunsope/IdeaProjects/imageStorage/
