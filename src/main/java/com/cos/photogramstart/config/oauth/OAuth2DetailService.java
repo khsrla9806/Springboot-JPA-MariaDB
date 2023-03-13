@@ -19,39 +19,54 @@ import java.util.UUID;
 @RequiredArgsConstructor
 @Service
 public class OAuth2DetailService extends DefaultOAuth2UserService {
-    // SecurityConfig에서 사용하기 위해서는 OAuth2UserService 타입으로 만들어야 한다.
-    // 그렇기 때문에 DefaultOAuthUserService를 상속받으면 된다.
-    // OAuth2DetailService의 역할은 OAuth2 요청이 들어왔을 때, 그 응답 데이터를 받아서 로직을 처리하는 역할을 한다.
-
     private final UserRepository userRepository;
 
     @Override
     public OAuth2User loadUser(OAuth2UserRequest userRequest) throws OAuth2AuthenticationException {
-        System.out.println("OAuth2 서비스 실행됨");
-        OAuth2User oAuth2User = super.loadUser(userRequest);
-        Map<String, Object> userInfo = oAuth2User.getAttributes();
+        OAuth2User oauth2User = super.loadUser(userRequest);
+        return processOAuth2User(userRequest, oauth2User);
+    }
 
-        String username = "facebook_" + (String) userInfo.get("id"); // 페이스북에서 주는 정보를 보면 id 값으로 제공된다.
-        String password = new BCryptPasswordEncoder().encode(UUID.randomUUID().toString()); // 비밀번호는 암호화가 되어야 한다.
-        String email = (String) userInfo.get("email");
-        String name = (String) userInfo.get("name");
+    private OAuth2User processOAuth2User(OAuth2UserRequest userRequest, OAuth2User oauth2User) {
+        OAuth2UserInfo oauth2UserInfo = null;
+
+        System.out.println(oauth2User.getAttributes());
+
+        if (userRequest.getClientRegistration().getClientName().equals("Google")) {
+            System.out.println("구글 로그인을 요청합니다.");
+            oauth2UserInfo = new GoogleInfo(oauth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getClientName().equals("Facebook")) {
+            System.out.println("페이스북 로그인을 요청합니다.");
+            oauth2UserInfo = new FacebookInfo(oauth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getClientName().equals("Kakao")) {
+            System.out.println("카카오 로그인을 요청합니다.");
+            oauth2UserInfo = new KakaoInfo(oauth2User.getAttributes());
+        } else if (userRequest.getClientRegistration().getClientName().equals("Naver")) {
+            System.out.println("네이버 로그인을 요청합니다.");
+            oauth2UserInfo = new NaverInfo((Map)oauth2User.getAttributes());
+        } else {
+            System.out.println("구글, 페이스북, 카카오, 네이버만 로그인을 제공합니다.");
+        }
+
+        String username = oauth2UserInfo.getUsername();
+        String password = new BCryptPasswordEncoder().encode(UUID.randomUUID().toString());
+        String name = oauth2UserInfo.getName();
+        String email = oauth2UserInfo.getEmail();
 
         User userEntity = userRepository.findByUsername(username);
 
-        if (userEntity == null) { // OAuth2 요청할 때마다 계속 INSERT되는 것을 막기위한 로직, 기존 회원이 존재하면 회원가입 로직 X
+        if (userEntity == null) {
             User user = User.builder()
                     .username(username)
+                    .name(name)
                     .password(password)
                     .email(email)
-                    .name(name)
                     .role("ROLE_USER")
                     .build();
 
-            // UserDetails 타입으로 반환해야 Session에 저장하고 할 수 있다.
-            // 그래서 PrincipalUserDetail에서 OAuth2User를 상속받게하여 loadUser에서 사용할 수 있도록 해준다.
-            return new PrincipalUserDetails(userRepository.save(user), oAuth2User.getAttributes());
+            userEntity = userRepository.save(user);
         }
 
-        return new PrincipalUserDetails(userEntity, oAuth2User.getAttributes());
+        return new PrincipalUserDetails(userEntity, oauth2User.getAttributes());
     }
 }
