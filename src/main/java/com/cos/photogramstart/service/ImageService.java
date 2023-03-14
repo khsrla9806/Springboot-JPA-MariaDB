@@ -3,6 +3,7 @@ package com.cos.photogramstart.service;
 import com.cos.photogramstart.config.auth.PrincipalUserDetails;
 import com.cos.photogramstart.domain.image.Image;
 import com.cos.photogramstart.domain.image.ImageRepository;
+import com.cos.photogramstart.handler.ex.CustomApiException;
 import com.cos.photogramstart.web.dto.image.ImageUploadDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -10,6 +11,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -30,6 +33,12 @@ public class ImageService {
     public void imageUpload(ImageUploadDto dto, PrincipalUserDetails principal) {
         // 업로드되는 원본 파일명
         String originalFileName = dto.getFile().getOriginalFilename();
+
+        try {
+            originalFileName = URLEncoder.encode(originalFileName, "UTF-8");
+        } catch (UnsupportedEncodingException exception) {
+            throw new CustomApiException(exception.getMessage());
+        }
 
         // 같은 이름의 파일을 다른 유저가 저장할 위험성이 있기 때문에 식별자로 UUID를 사용
         // UUID는 고유성을 확보할 수 있는 ID값을 만들게끔 해주는 기술이다.

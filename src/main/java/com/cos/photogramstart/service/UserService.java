@@ -14,6 +14,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -83,7 +85,14 @@ public class UserService {
     @Transactional
     public User profileImageUrlUpdate(int principalId, MultipartFile profileImageFile) {
         UUID uuid = UUID.randomUUID();
-        String imageFileName = uuid + "_" + profileImageFile.getOriginalFilename();
+        String originalName = profileImageFile.getOriginalFilename();
+        try {
+            originalName = URLEncoder.encode(originalName, "UTF-8");
+        } catch (UnsupportedEncodingException exception) {
+            throw new CustomApiException(exception.getMessage());
+        }
+        System.out.println("인코딩 이미지 => " + originalName);
+        String imageFileName = uuid + "_" + originalName;
         Path imageFilePath = Paths.get(uploadFolder + imageFileName);
 
         try {
